@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  db: 
+          image: mysql:8.0
+          container_name: db
+          environment:
+              MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+              MYSQL_DATABASE: ${MYSQL_DATABASE}
+              MYSQL_USER: ${MYSQL_USER}
+              MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+          ports:
+              - "${DOCKER_IP}:3306:3306"
+          restart: always
+          volumes:
+              - ./config/mysql_data:/var/lib/mysql
+
+  socialsphere_web:  
+      container_name: socialsphere_web
+      ports: 
+          - "${DOCKER_IP}:443:443"
+          - "${DOCKER_IP}:7000:8000"
+          - "${DOCKER_IP}:80:80"
+      volumes:            
+          - ./apps/django:/SocialSphere/apps/django
+      restart: always
+      build: 
+          context: .
+          dockerfile: Dockerfile
+      links:
+          - db
+
+  phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306              #port number of mysql service running on inside of the "db" docker-service
+            PMA_ARBITRARY: 1
+            UPLOAD_LIMIT: 2000M
+        restart: always
+        ports:
+            - '${DOCKER_IP}:8080:80'
+    

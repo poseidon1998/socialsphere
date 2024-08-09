@@ -1,0 +1,12 @@
+Django
+django-crispy-forms
+django-evolution
+django-extensions
+django-firebase-auth
+django-jazzmin
+djangorestframework
+djangorestframework-api-key
+Flask
+mysql-connector
+mysql-connector-python
+mysqlclient

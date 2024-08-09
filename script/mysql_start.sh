@@ -1,0 +1,1 @@
+mysql -u ssuser -h localhost -p Ssphere@123 $1 < $2
