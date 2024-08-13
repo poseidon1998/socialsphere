@@ -27,6 +27,10 @@
     With Swagger:
                 -- Use following link to see documentation for all APIs('http://127.0.0.1:7000/schema/redoc/')
 
+#### swagger-docs
+
+![Alt text](apps/images/api_docs.png)
+
 # 5.To access Db:
     Pgadmin:
                 -- Connect postgress server with pgadmin to access database in UI
@@ -37,10 +41,6 @@
                             user name = ssuser
                             password  = Admin@123
 ![Alt text](apps/images/pgadmin.png)
-
-#### swagger-docs
-
-![Alt text](apps/images/api_docs.png)
 
 
 ## Tools Used
