@@ -1,46 +1,66 @@
 version: '3'
 
 services:
-  db: 
-          image: mysql:8.0
-          container_name: db
-          environment:
-              MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-              MYSQL_DATABASE: ${MYSQL_DATABASE}
-              MYSQL_USER: ${MYSQL_USER}
-              MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-          ports:
-              - "${DOCKER_IP}:3306:3306"
-          restart: always
-          volumes:
-              - ./config/mysql_data:/var/lib/mysql
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      POSTGRES_DB: SS_V1
+      POSTGRES_USER: ssuser
+      POSTGRES_PASSWORD: Admin@123
+    ports:
+      - "5400:5432"
+    restart: always
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5410:80"
+    # volumes:
+    #   - pgadmin_data:/var/lib/pgadmin
+    restart: always
+    depends_on:
+      - db
+
 
   socialsphere_web:  
-      container_name: socialsphere_web
-      ports: 
-          - "${DOCKER_IP}:443:443"
-          - "${DOCKER_IP}:7000:8000"
-          - "${DOCKER_IP}:80:80"
-      volumes:            
-          - ./apps/django:/SocialSphere/apps/django
-      restart: always
-      build: 
-          context: .
-          dockerfile: Dockerfile
-      links:
-          - db
+    container_name: socialsphere_web
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:            
+      - ./apps/django:/SocialSphere/apps/django
+    ports: 
+      - "${DOCKER_IP}:7000:8000"
+      - "${DOCKER_IP}:70:80"
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://ssuser:Admin@123:5400/SS_V1
 
-  phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
-        links:
-            - db
-        environment:
-            PMA_HOST: db
-            PMA_PORT: 3306              #port number of mysql service running on inside of the "db" docker-service
-            PMA_ARBITRARY: 1
-            UPLOAD_LIMIT: 2000M
-        restart: always
-        ports:
-            - '${DOCKER_IP}:8080:80'
-    
+  # neo4j:
+  #   image: neo4j:5.22.0
+  #   container_name: neo4j
+  #   ports:
+  #     - "71:7687"
+  #     - "72:7474"
+  #   restart: always
+  #   environment:
+  #     NEO4J_AUTH: none
+  #   volumes:
+  #     - ./neo4j_data:/data
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  postgres_data:

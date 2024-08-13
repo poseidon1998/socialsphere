@@ -10,3 +10,8 @@ Flask
 mysql-connector
 mysql-connector-python
 mysqlclient
+psycopg2-binary>=2.8,<3.0
+neo4j
+py2neo
+django_neomodel
+django-rest-swagger

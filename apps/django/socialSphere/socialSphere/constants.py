@@ -1,0 +1,5 @@
+db_user = "ssuser"
+db_password = "Admin@123"
+db_host = "db"
+db_port = "5432"
+db_name = "SS_V1"

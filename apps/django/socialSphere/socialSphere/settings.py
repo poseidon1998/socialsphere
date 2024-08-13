@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from . import constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-z&h-5$10$mvgq)kf5yxod3!*&sth$!bj@8w(63wfo-z57dl+0v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,8 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'userdetails',
+    'rest_framework_swagger',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
+SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR', 
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
 
+REST_FRAMEWORK = {
+     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -47,9 +60,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware'
 ]
 
 ROOT_URLCONF = 'socialSphere.urls'
+CORS_ALLOW_ALL_ORIGINS=True
 
 TEMPLATES = [
     {
@@ -75,8 +90,12 @@ WSGI_APPLICATION = 'socialSphere.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': constants.db_name,
+        'USER': constants.db_user,
+        'PASSWORD': constants.db_password,
+        'HOST': constants.db_host,
+        'PORT': constants.db_port,
     }
 }
 
